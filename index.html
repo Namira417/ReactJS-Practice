@@ -12,7 +12,8 @@
     function App() {
         const [counter, setCounter] = React.useState(0); // 각 배열 요소별로 이름 붙이기!!!!
         const onClick = () => {
-            setCounter(counter + 1); // render 기능을 자동포함 즉 새값을 가지고 refresh된다. 
+            //setCounter(counter + 1); // render 기능을 자동포함 즉 새값을 가지고 refresh된다.
+            setCounter((current) => current + 1); // 다른곳에서 counter썼을시 생길 버그 방지 위해 '현재값' currnet를 사용! 
         };
         return (
             < div >
