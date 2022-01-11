@@ -10,21 +10,46 @@
 <script type="text/babel">
     const root = document.getElementById("root");
     function App() {
-        const [minutes, setMinutes] = React.useState();
+        const [amount, setAmount] = React.useState();
+        const [inverted, setinverted] = React.useState(false);
         const onChange = (event) => {
-            setMinutes(event.target.value);
+            setAmount(event.target.value);
+        };
+        const reset = () => setAmount(0);
+        const onInvert = () => {
+            reset();
+            setinverted((current) => !current);
         };
         // label은 인풋과 연결되는 텍스트
         // for를 사용해서 인풋id와 연결 (JS 단어임. 리액트에선 안씀 )
         return (
-            < div >
+            <div>
                 <h1>Super Converter</h1>
-                <label for="minutes"> Minutes </label>
-                <input value={minutes} id="minutes" placeholder="Minutes" type="number" onChange={onChange}/>
-                <h4>You want to put {minutes}</h4>
-                <label for="hours"> Hours </label>
-                <input id="hours" placeholder="Hours" type="number" />
-            </div >
+                <div>
+                    <label for="minutes"> Minutes </label>
+                    <input
+                        value={inverted ? amount*60 : amount}
+                        id="minutes"
+                        placeholder="Minutes"
+                        type="number"
+                        onChange={onChange}
+                        disabled={inverted}
+                    />
+                </div>
+                <div>
+                    <label for="hours"> Hours </label>
+                    <input
+                        value={inverted ? amount : Math.round(amount/60)} // 시간을 나태내는거니까 반올림
+                        id="hours"
+                        placeholder="Hours"
+                        type="number"
+                        onChange={onChange}
+                        disabled={!inverted}
+                    />
+                </div>
+                <button onClick={reset}>Reset</button>
+                <button onClick={onInvert}>{inverted ? "To minutes" : "To Hours"}</button>
+            </div>
         );
     }
     ReactDOM.render(<App />, root);
