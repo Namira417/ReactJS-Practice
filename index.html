@@ -10,22 +10,30 @@
 <script type="text/babel">
     /*부모에게서 정보를 받아와서(mytext, 이름 아무거나 해도 됨) 자식에게 전달하는것*/
     /*이 방법으로 버튼 양식만 만들어놓고 텍스트만 새로 받아서 재활용 할 수 있음.*/
-    function Btn({myText, myFontSize}){
-        return <button style={{
+    function Btn({myText, onClick}){
+        return <button
+            onClick={onClick} 
+            style={{
             backgroundColor : "tomato",
             color:"white",
             padding: "10px 20px",
             border: 0,
             borderRadius: 10,
-            fontSize : myFontSize ? 18 : 10 
             /*if else 를 사용하여 받은 매개변수에 따라 폰트사이즈를 다르게 설정*/
         }}>{myText}</button>;
     }
+    /*리액트의 최적화 방법. prop이 바뀌지 않았을 경우엔 렌더링하지 않고 이전값을 기억해 가만히 있게함*/
+    /*변경된 컴포넌트만 리렌더링하게 해줘서 최적화해줌*/
+    const MemorizedBtn = React.memo(Btn)
     function App() {
+        const [value, setValue] = React.useState("Save Changes");
+        const changeValue = () => setValue("Revert Changes");
         return (
+            /*여기있는 onClick은 이벤트리스너가 아닌 prop일 뿐이다.*/
+            /*커스텀 버튼에 있는건 prop, 위 html에 있으면 이벤트리스너*/
             <div>
-                <Btn myText="Save Changes" myFontSize={true}/>
-                <Btn myText="Continue" myFontSize={false}/>
+                <MemorizedBtn myText={value} onClick={changeValue}/>
+                <MemorizedBtn myText="Continue"/>
             </div>
         );
     }
